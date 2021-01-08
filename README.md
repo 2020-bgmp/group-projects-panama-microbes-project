@@ -2,7 +2,7 @@
 ---
 Pipeline for processing and analysis of fungal ITS amplicon sequencing data. Used to analyze soil samples from across the isthumus of Panama for the McGuire lab at the University of Oregon.  
 
-![workflow](../workflow.png)
+<img width="610" alt="workflow" src="https://user-images.githubusercontent.com/54604213/104035462-03bbb480-5187-11eb-9791-fca049770839.png">
 
 ## Part (a) - Data proccessing &#8594; taxonomy assignment
 ---
