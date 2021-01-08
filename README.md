@@ -1,4 +1,4 @@
-# group-projects-panama-microbes-project
+# Panama-microbes-project
 ---
 Pipeline for processing and analysis of fungal ITS amplicon sequencing data. Used to analyze soil samples from across the isthumus of Panama for the McGuire lab at the University of Oregon.  
 
