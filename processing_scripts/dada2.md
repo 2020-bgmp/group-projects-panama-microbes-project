@@ -50,7 +50,7 @@ FWD.orients <- allOrients(FWD)
 REV.orients <- allOrients(REV)
 FWD.orients
 ```
-Pre-filter to remove sequences containing "N"
+Pre-filter to remove sequences containing "N":
 ```
 names.fS.filtN_fw <- file.path(path, "filtN_fw", basename(name.fS)) # path to put N filtered reads path+filtN_fw --forward reads
 
@@ -79,7 +79,7 @@ Load cutadapt:
 cutadapt <- "cutadapt" 
 system2(cutadapt, args = "--version") #  system2 allows you to Run shell commands from R --will look for version of cutadapt
 ```
-Create output file for trimmed reads,define parameters for cutadapt, and run:
+Create output file for trimmed reads, define parameters for cutadapt, and run:
 ```
 cutPath <- file.path(path, "cutadapt_fw") 
 if(!dir.exists(cutPath)) dir.create(cutPath) 
