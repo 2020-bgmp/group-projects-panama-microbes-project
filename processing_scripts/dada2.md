@@ -17,6 +17,8 @@ library(Biostrings)
 packageVersion("Biostrings")
 library(ShortRead)
 packageVersion("ShortRead")
+library(BiocManager)
+packageVersion("BiocManager")
 ```
 Define path to point to the directory containing FASTQ files:  
 ```
@@ -128,4 +130,105 @@ out <- filterAndTrim(cutFs, filtFWD, maxN = 0, maxEE = c(2, 2),
                      truncQ = 2, minLen = 50, rm.phix = TRUE, compress = F, multithread = TRUE)  #filter the reads
 
 saveRDS(out, "./out_2filttrim_fw.rds") # look at how many reads were filtered
+```
+## Learn error rates  
+
+Set path to point at directory of filtered reads:
+```
+filtPath="./"
+```
+Set samples names:
+```
+filtFs <- sort(list.files(filtPath, pattern = "_R1.fastq.gz", full.names = TRUE))
+
+get.sample.name <- function(fname) strsplit(basename(fname), "_")[[1]][1]
+sample.names <- unname(sapply(filtFs, get.sample.name))
+
+names(filtFs) <- sample.names
+```
+Learn error rates:
+```
+set.seed(111)
+# Learn forward error rates
+errF <- learnErrors(filtFs, nbases=1e8, multithread=TRUE)
+```
+Create merge object (not actually merged data):
+```
+# Sample inference and merger of paired-end reads
+mergers <- vector("list", length(sample.names))
+names(mergers) <- sample.names
+for(sam in sample.names) {
+  cat("Processing:", sam, "\n")
+  derepF <- derepFastq(filtFs[[sam]])
+  ddF <- dada(derepF, err=errF, multithread=TRUE)
+  mergers[[sam]] <- ddF
+}
+rm(derepF)
+```
+Create ASV table and save output:
+```
+# Construct sequence table and remove chimeras
+ASVtab <- makeSequenceTable(mergers)
+dim(ASVtab)
+table(nchar(getSequences(ASVtab)))
+saveRDS(ASVtab, "./ASVtab.rds") #seq table. if running big data pipeline this is the table you'll need for merging with other seq runs
+```
+Remove chimeras and save output:
+```
+# remove chimeric sequences
+ASV.nochim <- removeBimeraDenovo(ASVtab, method="consensus", multithread=TRUE, verbose=TRUE)
+dim(ASV.nochim)
+sum(ASV.nochim)/sum(ASVtab)
+saveRDS(ASV.nochim, "./ASVnochim.rds") #this will be the file that you use if you plan on running phylogenetic diversity analyses later on
+```
+Create "read tracks" file to inspect number of reads output of each step in the pipeline (Sanity check):
+```
+out <- readRDS("./out_2filttrim_fw.rds")
+getN <- function(x) sum(getUniques(x))
+track <- cbind(out, sapply(mergers, getN), rowSums(ASV.nochim))
+colnames(track) <- c("input", "filtered", "denoisedF", "nonchim")
+rownames(track) <- sample.names
+write.csv(track,"read_tracks_fw.csv") #this is important for troubleshooting
+
+head(track)
+```
+
+## Assign taxonomy using latest UNITE fungal database
+
+Point to UNITE database on local machine:
+```
+unite.ref <- "./sh_general_release_dynamic_s_04.02.2020_dev.fasta"  #CHANGE filename to whatever the reference database is
+```
+Assign taxonomy:
+```
+taxa <- assignTaxonomy(ASV.nochim, unite.ref, multithread = FALSE, tryRC = TRUE) 
+```
+Save various output files for reference:
+```
+write.table(taxa, "PanamaPrecip_ITS_taxa.txt", sep='\t', row.names=T, quote=FALSE) # write the taxa table out to a file just in case
+
+ASV.T <- t(ASV.nochim)
+write.table(ASV.T, "PanamaPrecip_itsASV-nochim.txt", sep="\t", row.names=TRUE, col.names=NA, quote=FALSE) #write the ASV table out to a file just in case
+
+#can also write rep seqs to fasta just in case we need later
+uniquesToFasta(ASV.nochim, fout='rep-seqs.fna', ids=colnames(ASV.nochim))
+
+#make your combined ASV table w taxonomy
+asv=read.delim("PanamaPrecip_itsASV-nochim.txt")
+
+taxa=read.delim("PanamaPrecip_ITS_taxa.txt")
+
+taxa$X=rownames(taxa)
+
+tab <- merge(taxa,asv,by="X",sort=F)
+
+tab <- subset(tab,Kingdom != "k__unidentified") # remove unidentified at kingdom level
+tab <-subset(tab,Kingdom != "k__Rhizaria") # remove rhizaria ****for ITS only. for 16S you'll remove mitochondrial seqs, but could also be done downstream
+
+write.table(tab, "PanamaPrecip_ITS_ASVtable.txt", sep='\t', row.names=F, quote=FALSE) # combined table
+
+sumo <- data.frame(X=colSums(tab[9:ncol(tab)])) # get sample sums to inform normalization technique
+sum1 <- sumo[order(sumo$X),,drop=F] # order low to high
+
+write.table(sum1, file="PanamaPrecip_ITS_samplesums.txt", sep="\t") #change file name --sample sum table
 ```
