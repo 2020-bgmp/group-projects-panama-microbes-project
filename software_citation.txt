@@ -1,0 +1,40 @@
+SOFTWARE REFERENCES 
+
+FastQC - 0.11.5
+
+QIIME - 1.9.1
+QIIME allows analysis of high-throughput community sequencing data
+J Gregory Caporaso, Justin Kuczynski, Jesse Stombaugh, Kyle Bittinger, Frederic D Bushman, Elizabeth K Costello, Noah Fierer, Antonio Gonzalez Pena, Julia K Goodrich, Jeffrey I Gordon, Gavin A Huttley, Scott T Kelley, Dan Knights, Jeremy E Koenig, Ruth E Ley, Catherine A Lozupone, Daniel McDonald, Brian D Muegge, Meg Pirrung, Jens Reeder, Joel R Sevinsky, Peter J Turnbaugh, William A Walters, Jeremy Widmann, Tanya Yatsunenko, Jesse Zaneveld and Rob Knight; Nature Methods, 2010; doi:10.1038/nmeth.f.303
+
+DADA2 - 1.10.1
+Callahan BJ, McMurdie PJ, Rosen MJ, Han AW, Johnson AJA, Holmes SP (2016). “DADA2: High-resolution sample inference from Illumina amplicon data.” Nature Methods, 13, 581-583. doi: 10.1038/nmeth.3869. 
+
+ShortRead - 1.40.0
+Morgan M, Anders S, Lawrence M, Aboyoun P, Pagès H, Gentleman R (2009). “ShortRead: a Bioconductor package for input, quality assessment and exploration of high-throughput sequence data.” Bioinformatics, 25, 2607-2608. doi: 10.1093/bioinformatics/btp450, http://dx.doi.org10.1093/bioinformatics/btp450. 
+
+BioStrings - 2.48.0
+Pagès H, Aboyoun P, Gentleman R, DebRoy S (2020). Biostrings: Efficient manipulation of biological strings. R package version 2.48.0, https://bioconductor.org/packages/Biostrings.
+
+Cutadapt - 1.15
+MARTIN, Marcel. Cutadapt removes adapter sequences from high-throughput sequencing reads. EMBnet.journal, [S.l.], v. 17, n. 1, p. pp. 10-12, may 2011. ISSN 2226-6089. Available at: <http://journal.embnet.org/index.php/embnetjournal/article/view/200>. Date accessed: 04 feb. 2021. doi:https://doi.org/10.14806/ej.17.1.200. 
+
+Funguild - 1.1
+Nguyen NH, Song Z, Bates ST, Branco, S, Tedersoo L, Menke J, Schilling JS, Kennedy PG. 2016. FUNGuild: an open annotation tool for parsing fungal community datasets by ecological guild. Fungal Ecology 20:241-248.
+
+tidyverse - 1.3.0
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+lme4 - 1.1.26
+Douglas Bates, Martin Maechler, Ben Bolker, Steve Walker (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48. doi:10.18637/jss.v067.i01.
+
+DESeq2 - 1.28.1
+Love, M.I., Huber, W., Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2 Genome Biology 15(12):550 (2014)
+
+phyloseq - 1.32.0
+phyloseq: An R package for reproducible interactive analysis and graphics of microbiome census data. Paul J. McMurdie and Susan Holmes (2013) PLoS ONE 8(4):e61217.
+
+vegan - 2.5.7
+Jari Oksanen, F. Guillaume Blanchet, Michael Friendly, Roeland Kindt, Pierre Legendre, Dan McGlinn, Peter R. Minchin, R. B. O'Hara, Gavin L. Simpson, Peter Solymos, M. Henry H. Stevens, Eduard Szoecs and Helene Wagner (2020). vegan: Community Ecology Package. R package version 2.5-7. https://CRAN.R-project.org/package=vegan goeveg - 0.4.2
+
+MASS - 7.3.53
+Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0
