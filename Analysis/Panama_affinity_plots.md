@@ -1,7 +1,13 @@
 ``` r
+library(lme4)
+library(cowplot)
+library(goeveg)
+library(tidyverse)
+theme_set(theme_classic())
+
 # read in normalized ASV table and metadata
-metadata <- read_tsv("../nodrysamples/panama_metadata_full_v1.txt")
-ASV_tab_rar <- read_tsv("../nodrysamples/PanamaPrecip_ITS_ASVs_r10574.txt")
+metadata <- read_tsv("panama_metadata_full_v1.txt")
+ASV_tab_rar <- read_tsv("PanamaPrecip_ITS_ASVs_r10574.txt")
 
 meta_sub <- subset(metadata, select = c("Sample_ID", "Plot", "PlotCreated", "pH.water", 
                                         "ResinP.mg_kg", "MAP", "DON_mg.N_kg"))
