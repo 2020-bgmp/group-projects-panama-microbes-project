@@ -1,0 +1,123 @@
+---
+title: "ASV Affinity Abundance"
+author: "Demi Glidden, Susan Collins, Natalie Winans"
+date: "2/24/2021"
+output: html_document
+---
+
+This document details data preparation for use in phyloseq. It uses metadata, Funguild output, DADA2 ASV table, and ASV affinities produced by custom logistic modeling R (not shown here).
+
+Code is commented for clarity.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+## Reading in the data
+
+```{r data, message=FALSE}
+library(tidyverse)
+library(dplyr)
+library(phyloseq); packageVersion("phyloseq")
+library(tibble)
+
+setwd("/Users/demiglidden/bioinformatics/Panama/StatisticalAnalyses")
+
+#read in data
+ids <- read_csv("ASV_ID_seq.csv")
+classified <- read.csv("classified_ASVs.csv")
+funguild <- read_tsv("transformed_ASVfunguildtable.guilds.txt")
+metadata <- read_tsv("panama_metadata_full_v1.txt")
+ASV_10574 <- read_tsv("PanamaPrecip_ITS_ASVs_r10574.txt")
+```
+
+## Data preparation
+
+Rename columns for consistency:
+
+```{r dataprep}
+#rename sequence columns so they match (ASV to ASV_ID)
+classified <- classified %>% dplyr::rename(ASV_ID = ASV)
+#rename to ASV_seq
+funguild <- funguild %>% dplyr::rename(ASV_seq = otuID)
+#rename X to ASV_seq
+ASV_10574 <- ASV_10574 %>% dplyr::rename(ASV_seq = X)
+#drop sample counts
+affinities <- classified %>% select(c(Affinity, ASV_ID))
+```
+
+The data frames need to merged with the ASV_IDs, then we can begin to make data frames that can be turned into phyloseq objects.
+
+```{r mergingfiles}
+#join the two data frames so that the affinities have ASV_IDs and sequences
+affinity_ids <- left_join(affinities, ids, by = "ASV_ID")
+affinity_ids <- left_join(affinity_ids, funguild, by = "ASV_seq")
+
+###making taxa and count tables to turn them into phyloseq objects
+
+#get preliminary ASV count table
+asv_counts <- classified %>% dplyr::select(2:347)
+#remove duplicates 
+asv_counts <- asv_counts %>% distinct(ASV_ID, .keep_all=TRUE)
+#add seqs for use as row names
+asv_counts <- merge(asv_counts, ids, by="ASV_ID")
+#move seqs to front of data frame (not necessary, but tidy)
+asv_counts <- asv_counts %>% relocate(ASV_seq, .after = ASV_ID)
+```
+
+Moving forward with making phyloseq-worthy objects:
+
+```{r phyloseqprep}
+#get prelim taxa table
+asv_taxa <- ASV_10574 %>% dplyr::select(1:8)
+#merge with affinity IDs
+##the following steps also remove ASVs that do not have affinities, using the "right_join"
+asv_taxa <- right_join(asv_taxa, affinity_ids, by ="ASV_seq")
+asv_taxa <- as.data.frame(asv_taxa)
+#drop sequences, this part is opttional if you don't want them in your final phyloseq object
+#asv_taxa <- asv_taxa %>% dplyr::select(!c("ASV_seq"))
+#remove duplicates 
+asv_taxa <- asv_taxa %>% distinct(ASV_ID, .keep_all=TRUE)
+
+## make tables with only ASV IDs that are present in taxa and count tables
+common_ASVs <- merge(asv_taxa,asv_counts,by='ASV_seq')
+
+# separate the tables again
+#this will pull out the counts
+counts <- common_ASVs %>% dplyr::select(contains("_"))
+#this will pull out the taxonomy and affinities. if you want more info from the metadata, you can remove or add to the selection below with column numbers
+taxa <- common_ASVs %>% dplyr::select(1:10,12,14,15)
+
+#clean up after the merge: go back to one column of ASV_IDs, and rename them as such
+counts <- counts %>% select(-ASV_ID.x)
+counts <- counts %>% dplyr::rename(ASV_ID = ASV_ID.y)
+taxa <- taxa %>% dplyr::rename(ASV_ID = ASV_ID.x)
+
+#make ASV_IDs rownames
+taxa <- tibble::column_to_rownames(taxa, 'ASV_seq')
+taxa <- as.matrix(taxa)
+#make ASV_IDs rownames
+counts <- tibble::column_to_rownames(counts, 'ASV_seq')
+counts[] <- lapply(counts, as.numeric)
+```
+  
+## Making Phyloseq Objects
+
+All of the above transformations prepare the data to be read in by phyloseq and made into phyloseq objects.
+  
+```{r phyloseq}
+#make phyloseq objects
+counts_phylo = otu_table(counts, taxa_are_rows = TRUE)
+
+taxa_phylo = tax_table(taxa)
+
+ps <- phyloseq(counts_phylo,taxa_phylo)
+```
+  
+A simple plot showing abundances of ASVs with affinities for precipitation and phosphorous.
+  
+```{r plot}
+plot_bar(ps, x="Affinity") + 
+  theme_classic() +
+  ggtitle("Abundance of ASVs with MAP and P Affinities")
+```
