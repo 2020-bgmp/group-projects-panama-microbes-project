@@ -40,7 +40,7 @@ hist(meta_sub$pH.water, main = "Histogram of pH.water", xlab = NULL)
 hist(meta_sub$MAP, main = "Histogram of MAP", xlab = NULL)
 ```
 
-![](Plots/guilds/guild-chunk-2-1.png)
+![](Plots/Guilds/guild-chunk-2-1.png)
 
 ``` r
 #log transform resin P
@@ -79,7 +79,7 @@ meta_counts <- left_join(patho_counts, meta_counts,  by = "Sample_ID")
 
 #### Look at response distributions and transform as needed
 
-![](Plots/guilds/guild-chunk-6-1.png)
+![](Plots/Guilds/guild-chunk-6-1.png)
 
 Proceed with 4th root-transformed pathogen and AMF counts and
 untransformed saprotroph counts.
@@ -94,7 +94,7 @@ ggpairs(meta_counts_rmna, columns = c("logP", "pH.water",
     (transformed where necessary)")
 ```
 
-![](Plots/guilds/guild-chunk-8-1.png)
+![](Plots/Guilds/guild-chunk-8-1.png)
 
 ``` r
 #collinearity correlation cutoff?
@@ -258,7 +258,7 @@ qq_amf <- qqmath(step_mem_amf) # from lattice
 plot_grid(rvf_amf, qq_amf)
 ```
 
-![](Plots/guilds/guild-chunk-10-1.png)
+![](Plots/Guilds/guild-chunk-10-1.png)
 
 ``` r
 # plot predicted marginal effects based on model
@@ -267,7 +267,7 @@ plot(pred_amf, rawdata = T, facets = TRUE, show.x.title = FALSE, show.y.title = 
   labs(title = "Predicted values of 4th root-transformed AMF counts", y = "4th root-transformed AMF counts")
 ```
 
-![](Plots/guilds/guild-chunk-10-2.png)
+![](Plots/Guilds/guild-chunk-10-2.png)
 
 ``` r
 ## Saprotrophs
@@ -347,7 +347,7 @@ qq_sap <- qqmath(step_mem_sap) #looks ok
 plot_grid(rvf_sap, qq_sap)
 ```
 
-![](Plots/guilds/guild-chunk-10-3.png)
+![](Plots/Guilds/guild-chunk-10-3.png)
 
 ``` r
 pred_sap <- ggpredict(step_mem_sap, method = 're') #ggpredict from ggeffects library
@@ -356,7 +356,7 @@ plot(pred_sap, rawdata = T, facets = TRUE, show.x.title = FALSE) +
        y = "Saprotroph counts")
 ```
 
-![](Plots/guilds/guild-chunk-10-4.png)
+![](Plots/Guilds/guild-chunk-10-4.png)
 
 ``` r
 ## Pathogens
@@ -438,7 +438,7 @@ qq_path <- qqmath(step_mem_path)
 plot_grid(rvf_path, qq_path)
 ```
 
-![](Plots/guilds/guild-chunk-10-5.png)
+![](Plots/Guilds/guild-chunk-10-5.png)
 
 ``` r
 pred_path <- ggpredict(step_mem_path, method = 're') #ggpredict from ggeffects library
@@ -447,7 +447,7 @@ plot(pred_path, rawdata = T, facets = TRUE, show.x.title = FALSE) +
        y = "4th root-transformed pathogen counts")
 ```
 
-![](Plots/guilds/guild-chunk-10-6.png)
+![](Plots/Guilds/guild-chunk-10-6.png)
 
 ``` r
 #regression table w/sjPlot
@@ -854,13 +854,13 @@ anova(step_mem_path, step_ut_path)
 plot(step_ut_path) # classic fanning -> heteroscedasticity
 ```
 
-![](Plots/guilds/guild-chunk-12-1.png)
+![](Plots/Guilds/guild-chunk-12-1.png)
 
 ``` r
 qqmath(step_mem_sap) # this is ok
 ```
 
-![](Plots/guilds/guild-chunk-12-2.png)
+![](Plots/Guilds/guild-chunk-12-2.png)
 
 ``` r
 #try with untransformed amfs
@@ -956,13 +956,13 @@ anova(step_mem_amf, step_ut_amf)
 plot(step_ut_amf) # fanning again
 ```
 
-![](Plots/guilds/guild-chunk-12-3.png)
+![](Plots/Guilds/guild-chunk-12-3.png)
 
 ``` r
 qqmath(step_mem_amf)
 ```
 
-![](Plots/guilds/guild-chunk-12-4.png)
+![](Plots/Guilds/guild-chunk-12-4.png)
 
 ``` r
 #will use transformed responses

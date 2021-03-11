@@ -201,7 +201,7 @@ P_plot <- ggplot(P_affinities, aes(x = ResinP.mg_kg, y = Count/total_ASVs, color
 P_plot
 ```
 
-![](Plots/affinity/P%20affinity%20plot-1.png)
+![](Plots/Affinity/P%20affinity%20plot-1.png)
 
 Threshold for strong effect of resin phosphate. Low affinity defined as
 effect size \< -0.8 (blue points and lines). High affinity defined as
@@ -254,7 +254,7 @@ MAP_plot <- ggplot(MAP_affinities,
 MAP_plot
 ```
 
-![](Plots/affinity/MAP%20affinity%20plot-1.png)
+![](Plots/Affinity/MAP%20affinity%20plot-1.png)
 
 Threshold for strong effect of mean annual precipitation (MAP). Low
 affinity defined as effect size \< -0.8 (blue points and lines). High
@@ -308,7 +308,7 @@ N_plot <- ggplot(N_affinities,
 N_plot
 ```
 
-![](Plots/affinity/DON%20affinity%20plot-1.png)
+![](Plots/Affinity/DON%20affinity%20plot-1.png)
 
 Threshold for strong effect of dissolved organic nitrogen (DON). Low
 affinity defined as effect size \< -0.8 (blue points and lines). High
@@ -359,7 +359,7 @@ ggplot(P_phylum, aes(fill = Phylum, y = Count, x = Affinity)) +
   scale_y_continuous(expand = c(0,0)) 
 ```
 
-![](Plots/affinity/P%20affinity%20phylum-1.png)
+![](Plots/Affinity/P%20affinity%20phylum-1.png)
 
 ``` r
 # Class
@@ -385,7 +385,7 @@ ggplot(P_class, aes(fill = Class, y = Count, x = Affinity)) +
   guides(fill=guide_legend(ncol = 2))
 ```
 
-![](Plots/affinity/P%20affinity%20class-1.png)
+![](Plots/Affinity/P%20affinity%20class-1.png)
 
 ### Precipitation (MAP) affinity group composition
 
@@ -425,7 +425,7 @@ ggplot(MAP_phylum, aes(fill = Phylum, y = Count, x = Affinity)) +
   scale_y_continuous(expand = c(0,0)) 
 ```
 
-![](Plots/affinity/MAP%20affinity%20phylum-1.png)
+![](Plots/Affinity/MAP%20affinity%20phylum-1.png)
 
 ``` r
 # Class
@@ -451,7 +451,7 @@ ggplot(MAP_class, aes(fill = Class, y = Count, x = Affinity)) +
   scale_y_continuous(expand = c(0,0))
 ```
 
-![](Plots/affinity/MAP%20affinity%20class-1.png)
+![](Plots/Affinity/MAP%20affinity%20class-1.png)
 
 ### Nitrogen (DON) affinity group composition
 
@@ -491,7 +491,7 @@ ggplot(N_phylum, aes(fill = Phylum, y = Count, x = Affinity)) +
   scale_y_continuous(expand = c(0,0))
 ```
 
-![](Plots/affinity/N%20affinity%20phylum-1.png)
+![](Plots/Affinity/N%20affinity%20phylum-1.png)
 
 ``` r
 # Class
@@ -517,4 +517,4 @@ ggplot(N_class, aes(fill = Class, y = Count, x = Affinity)) +
   scale_y_continuous(expand = c(0,0))
 ```
 
-![](Plots/affinity/N%20affinity%20class-1.png)
+![](Plots/Affinity/N%20affinity%20class-1.png)
