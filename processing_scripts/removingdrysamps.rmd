@@ -1,0 +1,72 @@
+---
+title: "removing dry samples"
+author: "Demi Glidden"
+date: "11/11/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+asv <- read.delim("/Users/demiglidden/bioinformatics/Panama Project/PanamaPrecip_ITS_ASVtable.txt", row.names = NULL)
+```
+
+```{r}
+ASV_no2008 <- asv %>% select(-contains("2008")) %>%
+  select(-contains("2009")) %>%
+  select(-contains("2010")) %>%
+  select(-contains("2017"))
+
+  
+```
+
+```{r}
+write_delim(ASV_no2008, "PanamaPrecip_ITS_ASV_nodrysamples.txt", delim = "\t")
+```
+
+
+```{r}
+sampsums <- read.delim("/Users/demiglidden/bioinformatics/Panama Project/PanamaPrecip_ITS_samplesums.txt", sep = "\t", row.names = NULL)
+```
+
+
+```{r}
+sampsums_no2008 <- sampsums %>% filter(!grepl("2008", row.names(sampsums)))
+sampsums_no2009 <- sampsums_no2008 %>% filter(!grepl("2009", row.names(sampsums_no2008)))
+sampsums_no2010 <- sampsums_no2009 %>% filter(!grepl("2010", row.names(sampsums_no2009)))
+sampsums_nodry <- sampsums_no2010 %>% filter(!grepl("2017", row.names(sampsums_no2010)))
+```
+
+```{r}
+write_delim(sampsums_nodry, "PanamaPrecip_ITS_samplesums_nodrysamples.txt", delim = "\t")
+```
+
+
+```{r}
+read_tracks <- read.delim("/Users/demiglidden/bioinformatics/Panama Project/read_tracks_fw.csv", sep = ",", header = TRUE, row.names = 1)
+```
+
+
+```{r}
+readtracks_no2008 <- read_tracks %>% filter(!grepl("2008", row.names(read_tracks)))
+readtracks_no2009 <- readtracks_no2008 %>% filter(!grepl("2009", row.names(readtracks_no2008)))
+readtracks_no2010 <- readtracks_no2009 %>% filter(!grepl("2010", row.names(readtracks_no2009)))
+readtracks_nodry <- readtracks_no2010 %>% filter(!grepl("2017", row.names(readtracks_no2010)))
+```
+
+```{r}
+write_delim(readtracks_nodry, "read_tracks_fw_nodrysamples.csv", delim = ",")
+```
+
+```{r}
+demis_in <- read_delim("PanamaPrecip_ITS_ASVs_r10574.txt", delim = "\t")
+  
+```
+
+```{r}
+susans_in <- read_delim("PanamaPrecip_ITS_ASVs_r10000.txt", delim = "\t")
+  
+```
